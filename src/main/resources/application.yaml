@@ -1,0 +1,96 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: codedstreams-trade-producer
+
+  datasource:
+    url: jdbc:h2:file:./data/tradesdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8081
+        auto.register.schemas: true
+        use.latest.version: true
+        # Producer optimizations
+        acks: all
+        retries: 10
+        retry.backoff.ms: 1000
+        batch.size: 16384
+        linger.ms: 20
+        compression.type: snappy
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    display-request-duration: true
+    filter: true
+
+producer:
+  mock:
+    enabled: true
+    rate-ms: 500
+    users:
+      - "USER_001"
+      - "USER_002"
+      - "USER_003"
+      - "USER_004"
+      - "USER_005"
+    symbols:
+      - "BTC/USDT"
+      - "ETH/USDT"
+      - "SOL/USDT"
+      - "ADA/USDT"
+      - "DOT/USDT"
+    exchanges:
+      - "BINANCE"
+      - "COINBASE"
+      - "KRAKEN"
+      - "FTX"
+      - "KUCOIN"
+
+
+# Logging
+logging:
+  level:
+    com.cryptofirm: INFO
+    org.apache.kafka: WARN
+    org.springframework.kafka: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
