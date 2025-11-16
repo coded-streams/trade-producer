@@ -651,6 +651,6 @@ For issues and questions:
 
 ---
 
-**Maintained by**: CodedStreams Trading Platform Team  
-**Last Updated**: October 2025  
+**Maintained by**: Nestor Martourez @ Coded Streams  
+**Last Updated**: August 2025  
 **Dependencies**: Data Contracts Library v1.0.1+, Kafka 3.4+, Java 21+
